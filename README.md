@@ -1,8 +1,15 @@
 <br />
 <p align="center">
-  
-  
-
+<pre>
+ _   _           _           _____       _     
+| \ | |         | |         / ____|     (_)             
+|  \| | ___   __| | ___    | (___  _ __  _ _ __   ___   
+| .   |/ _ \ / _` |/ _ \    \___ \| '_ \| | '_ \ / _ \  
+| |\  | (_) | (_| |  __/    ____) | | | | | |_) |  __/  
+|_| \_|\___/ \__,_|\___|   |_____/|_| |_|_| .__/ \___| 
+                                          | |           
+                                          |_|           
+</pre>
   <h3 align="center">NodeSnipe</h3>
 
   <p align="center">
@@ -49,7 +56,7 @@ NodeSnipe is a console-based bot for claiming usernames that will become availab
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+This project only requires node and the node package manager (npm) as prerequisies.
 * npm
   ```sh
   npm install npm@latest -g
