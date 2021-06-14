@@ -4,6 +4,7 @@ const reference = require('./reference')
 
 // development library
 const util = require('util')
+const devMode = true
 
 const init = async () => {
 	// init style
@@ -53,15 +54,19 @@ const init = async () => {
 
 	// Authentication verification
 	var accessToken = ''
-	request.post({url:'https://authserver.mojang.com/authenticate', json: {"agent": {"name": "Minecraft", "version": 1},"username": email,"password": pw}}, function(err,httpResponse,body){
-		if(body['accessToken'] == null) {
-			console.log('Error: access token could not be aquired')
-		} else {
-			console.log('Authentication successful')
-			accessToken = body['accessToken']
-		}
+	if(!devMode) {
+		request.post({url:'https://authserver.mojang.com/authenticate', json: {"agent": {"name": "Minecraft", "version": 1},"username": email,"password": pw}}, function(err,httpResponse,body){
+			if(body['accessToken'] == null) {
+				console.log('Error: access token could not be aquired')
+			} else {
+				console.log('Authentication successful')
+				accessToken = body['accessToken']
+			}
 
-	})
+		})
+	} else {
+		accessToken = 'blahblahblah'
+	}
 
 	// Final confirmation
 	reference.terminalSeparator()
@@ -69,6 +74,9 @@ const init = async () => {
 	console.log('	Account email:		' + email)
 	console.log('	Delay:			' + delay)
 	console.log('	Targeted Username:	' + username)
+
+	// Fact in delay in waitTime after delay confirmation
+	waitTime = new Date(waitTime - delay);
 
 	var executeSnipe = false
 
@@ -83,12 +91,29 @@ const init = async () => {
 	console.clear()
 	reference.asciiName()
 
+	var launchTime = new Date()
+
 	console.log('Status: Ready')
 	console.log('Availability Time: ' + waitTime)
-	console.log('Time until Availability Time at Launch ' + waitTime - (delay + Date.now()))
-	console.log('Factored delay' + delay)
+	
+	var timeDiffEpoch = Math.abs(waitTime.getTime() - launchTime.getTime())
+
+	var timeDiffDays = Math.floor(timeDiffEpoch / (1000 * 60 * 60 * 24))
+	timeDiffEpoch -= timeDiffDays * (1000 * 60 * 60 * 24)
+
+	var timeDiffHours = Math.floor(timeDiffEpoch / (1000 * 60 * 60))
+	timeDiffEpoch -= timeDiffHours * (1000 * 60 * 60)
+
+	var timeDiffMinutes = Math.floor(timeDiffEpoch / (1000 * 60))
+	timeDiffEpoch -= timeDiffMinutes * (1000 * 60)
+
+	var timeDiffSeconds = Math.floor(timeDiffEpoch / 1000)
+	timeDiffEpoch -= timeDiffSeconds * (1000)
+
+	console.log(`Time until Availability Time at Launch: ${timeDiffDays} days ${timeDiffHours} hours ${timeDiffMinutes} minutes ${timeDiffSeconds} seconds `)
+	console.log('Factored delay: ' + delay)
 	console.log('Target: ' + username)
-	console.log('Account ' + email)
+	console.log('Account: ' + email)
 	if(accessToken != null) {
 		console.log('Access token: Acquired')
 	} else {
