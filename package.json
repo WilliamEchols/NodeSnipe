@@ -1,0 +1,27 @@
+{
+  "name": "minecraftusernamebot",
+  "version": "1.0.0",
+  "description": "A simple Minecraft username \"sniping\" bot using a combonation of official minecraft.net and unofficial namemc.com APIs for automatic, timed execution while considering delays in connection speed.",
+  "main": "snipe.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WilliamEchols/MinecraftUsernameBot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WilliamEchols/MinecraftUsernameBot/issues"
+  },
+  "homepage": "https://github.com/WilliamEchols/MinecraftUsernameBot#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "cheerio": "^1.0.0-rc.10",
+    "jjg-ping": "^1.0.3",
+    "node-schedule": "^2.0.0",
+    "prompt-sync": "^4.2.0",
+    "request": "^2.88.2"
+  }
+}
