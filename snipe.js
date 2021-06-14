@@ -2,16 +2,12 @@ const request = require('request');
 const prompt = require('prompt-sync')();
 const reference = require('./reference')
 
-const init = async () => {
-	console.log(reference.pingCheck)
+// development library
+const util = require('util')
 
+const init = async () => {
 	// init style
-	var programName = [
-		"mc sniper bot"
-	]
-	for(i = 0; i < programName.length; i++) {
-		console.log(programName[i])
-	}
+	reference.asciiName()
 
 	// ask user for a username
 	const username = prompt('username: ')
@@ -29,7 +25,7 @@ const init = async () => {
 	var pingList = []
 	var pingAvg = 0
 	for(var i = 0; i < pingNum; i++) {
-		var ping = reference.pingCheck
+		var ping = await reference.pingCheck()
 
 		pingList.push(ping)
 		pingAvg += ping
@@ -47,6 +43,59 @@ const init = async () => {
 	}
 
 	console.log('Delay: ' + delay + 'ms')
+	
+	reference.terminalSeparator()
+
+	// Account details
+	var email = prompt('Account email: ')
+	console.log('Account password:');
+	var pw = prompt({echo: '*'});
+
+	// Authentication verification
+	var accessToken = ''
+	request.post({url:'https://authserver.mojang.com/authenticate', json: {"agent": {"name": "Minecraft", "version": 1},"username": email,"password": pw}}, function(err,httpResponse,body){
+		if(body['accessToken'] == null) {
+			console.log('Error: access token could not be aquired')
+		} else {
+			console.log('Authentication successful')
+			accessToken = body['accessToken']
+		}
+
+	})
+
+	// Final confirmation
+	reference.terminalSeparator()
+	console.log('Final Confirmation: ')
+	console.log('	Account email:		' + email)
+	console.log('	Delay:			' + delay)
+	console.log('	Targeted Username:	' + username)
+
+	var executeSnipe = false
+
+	var finalConfirmation = prompt('Proceed?(y/n)')
+	if(finalConfirmation != "n" && finalConfirmation != "no" && finalConfirmation != "stop") {
+		executeSnipe = true
+	} else {
+		console.log('Snipe has been cancelled on ' + username + ' for ' + email)
+	}
+
+	// Reset screen for snipe mode
+	console.clear()
+	reference.asciiName()
+
+	console.log('Status: Ready')
+	console.log('Availability Time: ' + waitTime)
+	console.log('Time until Availability Time at Launch ' + waitTime - (delay + Date.now()))
+	console.log('Factored delay' + delay)
+	console.log('Target: ' + username)
+	console.log('Account ' + email)
+	if(accessToken != null) {
+		console.log('Access token: Acquired')
+	} else {
+		console.log('Access token: Failed - Please try again')
+	}
+
+	reference.terminalSeparator()
 
 }
 
