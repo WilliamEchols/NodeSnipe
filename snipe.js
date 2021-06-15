@@ -5,7 +5,7 @@ const reference = require('./reference')
 
 // development library
 const util = require('util')
-const devMode = true
+const devMode = false // development mode disables account authentication with Mojang and does not retreive a proper access token
 
 const init = async () => {
 	// init style
