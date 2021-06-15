@@ -1,8 +1,8 @@
-const ping = require('jjg-ping')
 const axios = require('axios')
 const schedule = require('node-schedule');
 const request = require('request')
 const prompt = require('prompt-sync')();
+const domainPing = require('domain-ping')
 
 const asciiName = async () => {
 	var ascii = [
@@ -27,7 +27,7 @@ const asciiName = async () => {
 const snipe = async (username, accessToken, waitTime) => {
 	// Attempt to snipe username with API
 
-	var executeSnipe = schedule.scheduleJob(waitTime, function(){
+	var executeSnipe = schedule.scheduleJob('uniqueSnipe', waitTime, function(){
 		for(let i = 0; i < 6; i++) {
 			request.put({url:`https://api.minecraftservices.com/minecraft/profile/name/${username}`, headers: {'Authorization': `Bearer ${accessToken}`}}, function(err,httpResponse,body){
 				if(body['name'] == 'username') {
@@ -41,7 +41,8 @@ const snipe = async (username, accessToken, waitTime) => {
 
 	var stopSnipe = prompt("Type 'stop' to end snipe: ")
 	if(stopSnipe == 'stop') {
-		executeSnipe.cancel()
+		var snipeJob = schedule.scheduledJobs['uniqueSnipe']
+		snipeJob.cancel()
 	}
 }
 
@@ -50,9 +51,13 @@ const terminalSeparator = async () => {
 }
 
 const pingCheck = async () => {
-	ping.system.ping('minecraft.net', function(latency, status) {
-		return latency
-	})
+	domainPing('minecraft.net')
+    		.catch((error) => {
+        		console.error(error);
+    		});
+	var pingTime = await domainPing('minecraft.net')
+	
+	return pingTime.ping_time
 }
 
 const waitTime = async (username) => {

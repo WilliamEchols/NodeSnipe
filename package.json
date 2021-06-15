@@ -19,7 +19,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.10",
-    "jjg-ping": "^1.0.3",
+    "domain-ping": "^0.2.1",
     "node-schedule": "^2.0.0",
     "prompt-sync": "^4.2.0",
     "request": "^2.88.2"

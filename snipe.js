@@ -2,6 +2,7 @@ const request = require('request');
 const prompt = require('prompt-sync')();
 const reference = require('./reference')
 
+
 // development library
 const util = require('util')
 const devMode = true
@@ -23,17 +24,9 @@ const init = async () => {
 	}
 
 	// generate automatic connection delay
-	var pingList = []
-	var pingAvg = 0
-	for(var i = 0; i < pingNum; i++) {
-		var ping = await reference.pingCheck()
+	var pingAvg = await reference.pingCheck()
 
-		pingList.push(ping)
-		pingAvg += ping
 
-		console.log('individual ping: ' + ping)
-	}
-	pingAvg = pingAvg/pingNum
 	console.log('ping average is ' + pingAvg + 'ms for ' + pingNum + ' latency tests ')
 
 	// Ask for verification for delay
@@ -122,6 +115,9 @@ const init = async () => {
 
 	reference.terminalSeparator()
 
+	// Execute sniper
+	
+	reference.snipe()
 }
 
 
