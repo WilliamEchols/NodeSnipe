@@ -91,19 +91,24 @@ const init = async () => {
 	
 	var timeDiffEpoch = Math.abs(waitTime.getTime() - launchTime.getTime())
 
-	var timeDiffDays = Math.floor(timeDiffEpoch / (1000 * 60 * 60 * 24))
-	timeDiffEpoch -= timeDiffDays * (1000 * 60 * 60 * 24)
+	
+	var epochUnits = [
+                    { 'totalRatio' : 1000 * 60 * 60 * 24,
+                        'value' : 0},
+                    { 'totalRatio' : 1000 * 60 * 60,
+                        'value' : 0},
+                    { 'totalRatio' : 1000 * 60,
+                        'value' : 0},
+                    { 'totalRatio' : 1000,
+                        'value' : 0}
+                  ]
 
-	var timeDiffHours = Math.floor(timeDiffEpoch / (1000 * 60 * 60))
-	timeDiffEpoch -= timeDiffHours * (1000 * 60 * 60)
+	for(var i = 0; i < epochUnits.length; i++) {
+		epochUnits[i]['value'] = Math.floor(timeDiffEpoch / epochUnits[i]['totalRatio'])
+		timeDiffEpoch -= epochUnits[i]['value'] * epochUnits[i]['totalRatio']
+	}
 
-	var timeDiffMinutes = Math.floor(timeDiffEpoch / (1000 * 60))
-	timeDiffEpoch -= timeDiffMinutes * (1000 * 60)
-
-	var timeDiffSeconds = Math.floor(timeDiffEpoch / 1000)
-	timeDiffEpoch -= timeDiffSeconds * (1000)
-
-	console.log(`Time until Availability Time at Launch: ${timeDiffDays} days ${timeDiffHours} hours ${timeDiffMinutes} minutes ${timeDiffSeconds} seconds `)
+	console.log(`Time until Availability Time at Launch: ${epochUnits[0]['value']} days ${epochUnits[1]['value']} hours ${epochUnits[2]['value']} minutes ${epochUnits[3]['value']} seconds `)
 	console.log('Factored delay: ' + delay)
 	console.log('Target: ' + username)
 	console.log('Account: ' + email)
